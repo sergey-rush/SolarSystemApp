@@ -10,12 +10,8 @@
 #import <UIKit/UIKit.h>
 
 @interface Planet : NSObject
-{
-    NSInteger id;
-    NSString *name;
-    UIImage *image;
-}
-@property(nonatomic, readwrite) NSInteger id;
-@property(nonatomic, readwrite) NSString *name;
-@property(nonatomic, readwrite) UIImage *image;
+@property NSInteger id;
+@property NSString *name;
+@property UIImage *icon;
+@property UIImage *image;
 @end

@@ -10,4 +10,5 @@
 
 @interface PlanetList : NSObject
 @property (strong, nonatomic) NSMutableArray *planets;
+- (NSArray *)getList;
 @end

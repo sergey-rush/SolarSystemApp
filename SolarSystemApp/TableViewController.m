@@ -7,6 +7,9 @@
 //
 
 #import "TableViewController.h"
+#import "ImageViewController.h"
+#import "Planet.h"
+#import "PlanetList.h"
 
 @interface TableViewController ()
 
@@ -17,11 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    PlanetList *planetList = [[PlanetList alloc]init];
+    self.planets = [planetList getList];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,23 +29,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSInteger sections = 3;
-    return sections;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(section==0){
-        return 2;
-    }
-    else if(section==1){
-        return 1;
-    }
-    else{
-        return 3;
-    }
+    NSInteger count = [self.planets count];
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -54,18 +44,28 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
-    if(indexPath.section == 0){
-        cell.textLabel.text = @"I am in section 1";
-    }
-    else if(indexPath.section == 1){
-        cell.textLabel.text = @"another section";
-    }
-    else{
-        cell.textLabel.text = [NSString stringWithFormat:@"cell %i", (int)indexPath.row];
-    }
-    
+    Planet *planet = [self.planets objectAtIndex:indexPath.row];
+    cell.textLabel.text = planet.name;
+    cell.imageView.image = planet.icon;
     return cell;
+}
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    //NSLog(@"%@", sender);
+    if([sender isKindOfClass:[UITableViewCell class]])
+    {
+        if([segue.destinationViewController isKindOfClass:[ImageViewController class]])
+        {
+            ImageViewController *nextViewController = segue.destinationViewController;
+            NSIndexPath *path = [self.tableView indexPathForCell:sender];
+            Planet *selectedPlanet = [self.planets objectAtIndex:path.row];
+            //nextViewController.imageView.image=selectedPlanet.image;            
+            nextViewController.planet = selectedPlanet;
+        }
+    }
 }
 
 /*
@@ -102,14 +102,6 @@
 }
 */
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
